@@ -2,7 +2,7 @@
 
 ## The Critical Gap and Its Resolution
 
-**Version 1.0 - February 3, 2026**
+**Date:** February 3, 2026
 
 ---
 
