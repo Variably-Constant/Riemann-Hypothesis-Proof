@@ -1015,8 +1015,11 @@ else:
     print(f"\nSome claims could not be verified. See details above.")
 
 # Save results
-with open('rh_formal_verification_complete.json', 'w') as f:
+from pathlib import Path
+results_file = Path("results/RH_14_Formal_Verification.json")
+results_file.parent.mkdir(exist_ok=True)
+with open(results_file, 'w') as f:
     json.dump(results, f, indent=2)
 
-print(f"\nResults saved to: rh_formal_verification_complete.json")
+print(f"\nResults saved to: {results_file}")
 print("=" * 80)

@@ -619,8 +619,11 @@ results = {
     "status": "Trace formula structure derived, matching with explicit formula established"
 }
 
-with open('rh_mellin_transform_results.json', 'w') as f:
+from pathlib import Path
+results_file = Path("results/RH_10_Mellin_Transform.json")
+results_file.parent.mkdir(exist_ok=True)
+with open(results_file, 'w') as f:
     json.dump(results, f, indent=2)
 
-print("\nResults saved to: rh_mellin_transform_results.json")
+print(f"\nResults saved to: {results_file}")
 print("=" * 80)

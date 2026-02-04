@@ -560,3 +560,18 @@ which is a deep analytical result that cannot be proven by symbolic algebra alon
 print("=" * 80)
 print("END OF Z3 VERIFICATION")
 print("=" * 80)
+
+# Save results
+import json
+from pathlib import Path
+results = {
+    "total_claims": total_count,
+    "proven": proven_count,
+    "failed": total_count - proven_count,
+    "verification_results": verification_results
+}
+results_file = Path("results/RH_13_Z3_Verification.json")
+results_file.parent.mkdir(exist_ok=True)
+with open(results_file, 'w') as f:
+    json.dump(results, f, indent=2, default=str)
+print(f"\nResults saved to: {results_file}")

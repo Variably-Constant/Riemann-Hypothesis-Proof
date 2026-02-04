@@ -451,8 +451,11 @@ eigenvalues directly.
 ))
 
 # Save results
-with open('rh_eigenvalue_simulation_results.json', 'w') as f:
+from pathlib import Path
+results_file = Path("results/RH_11_Eigenvalue_Simulation.json")
+results_file.parent.mkdir(exist_ok=True)
+with open(results_file, 'w') as f:
     json.dump(summary, f, indent=2, default=str)
 
-print("Results saved to: rh_eigenvalue_simulation_results.json")
+print(f"Results saved to: {results_file}")
 print("=" * 80)
