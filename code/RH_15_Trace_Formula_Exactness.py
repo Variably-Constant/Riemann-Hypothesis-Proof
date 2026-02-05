@@ -845,5 +845,90 @@ def main():
         json.dump(results, f, indent=2, default=str)
     log(f"\nResults saved to: {results_file}")
 
+    # ==========================================================================
+    # SAVE RAW DATA FOR FIGURES
+    # ==========================================================================
+    log("\n" + "=" * 70)
+    log("Saving Raw Data")
+    log("=" * 70)
+
+    def Phi_raw(t):
+        z = 0.25 + 0.5j * t
+        return special.digamma(z).real + np.log(np.pi) / 2
+
+    def von_mangoldt_raw(n):
+        if n <= 1:
+            return 0
+        for p in range(2, int(np.sqrt(n)) + 1):
+            if n % p == 0:
+                m = 0
+                temp = n
+                while temp % p == 0:
+                    temp //= p
+                    m += 1
+                if temp == 1:
+                    return np.log(p)
+                return 0
+        return np.log(n)
+
+    # Smooth term data
+    t_vals_smooth = np.linspace(0.1, 200, 500)
+    phi_vals_smooth = [Phi_raw(t) for t in t_vals_smooth]
+
+    # Oscillating term data
+    def oscillating_sum_raw(E, N_max=1000):
+        total = 0
+        for n in range(2, N_max + 1):
+            Lambda_n = von_mangoldt_raw(n)
+            if Lambda_n > 0:
+                total += Lambda_n / np.sqrt(n) * np.cos(E * np.log(n))
+        return total
+
+    E_vals_osc = np.linspace(10, 50, 200)
+    osc_vals = [oscillating_sum_raw(E) for E in E_vals_osc]
+
+    # Zero counting data
+    T_vals_count = np.linspace(10, 100, 50)
+    N_actual = [sum(1 for g in ZETA_ZEROS if g <= T) for T in T_vals_count]
+    N_asymptotic_raw = [T / (2 * np.pi) * np.log(T / (2 * np.pi)) - T / (2 * np.pi) + 7/8 for T in T_vals_count]
+
+    # Von Mangoldt data
+    n_range_raw = list(range(1, 51))
+    mangoldt_vals_raw = [von_mangoldt_raw(n) for n in n_range_raw]
+
+    raw_data = {
+        "metadata": {
+            "script": "RH_15_Trace_Formula_Exactness.py",
+            "generated": datetime.now().isoformat()
+        },
+        "zeta_zeros": ZETA_ZEROS,
+        "smooth_term": {
+            "t_vals": t_vals_smooth.tolist(),
+            "Phi_vals": phi_vals_smooth
+        },
+        "oscillating_term": {
+            "E_vals": E_vals_osc.tolist(),
+            "osc_vals": osc_vals
+        },
+        "zero_counting": {
+            "T_vals": T_vals_count.tolist(),
+            "N_actual": N_actual,
+            "N_asymptotic": N_asymptotic_raw
+        },
+        "von_mangoldt": {
+            "n_range": n_range_raw,
+            "Lambda_n": mangoldt_vals_raw
+        },
+        "test_summary": {
+            "passed": passed,
+            "total": total
+        }
+    }
+
+    raw_file = Path("results/RH_15_Trace_Formula_Exactness_RAW.json")
+    with open(raw_file, 'w') as f:
+        json.dump(raw_data, f, indent=2, default=str)
+    log(f"Raw data saved to: {raw_file}")
+
 if __name__ == "__main__":
     main()

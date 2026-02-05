@@ -10,7 +10,7 @@ Mathematical Rigor:
 - Results are EXACT, not numerical approximations
 - Each verification is a formal proof that the claim holds for ALL values
 
-Author: Mathematical Analysis
+Author: Mark Newton
 Date: January 2026
 """
 
@@ -40,12 +40,8 @@ def record_result(claim_name, status, details=""):
     if details:
         print(f"    {details}")
 
-# =============================================================================
-# CLAIM 1: Berry-Keating Eigenvalue Equation
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("CLAIM 1: Berry-Keating Eigenvalue Equation")
+print("Berry-Keating Eigenvalue Equation")
 print("=" * 80)
 
 print("""
@@ -108,12 +104,8 @@ if result == unsat:
 else:
     record_result("Eigenvalue Equation", "FAILED", "Unexpected counterexample")
 
-# =============================================================================
-# CLAIM 2: Real Eigenvalue Condition
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("CLAIM 2: Real Eigenvalue Condition")
+print("Real Eigenvalue Condition")
 print("=" * 80)
 
 print("""
@@ -175,12 +167,8 @@ if result == unsat:
 else:
     record_result("Eigenvalue Value", "FAILED", "Unexpected")
 
-# =============================================================================
-# CLAIM 3: Functional Equation Symmetry Correspondence
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("CLAIM 3: Functional Equation Symmetry Correspondence")
+print("Functional Equation Symmetry Correspondence")
 print("=" * 80)
 
 print("""
@@ -219,12 +207,8 @@ if result == unsat:
 else:
     record_result("Symmetry Correspondence", "FAILED", "Unexpected counterexample")
 
-# =============================================================================
-# CLAIM 4: Critical Point at q = 1/2
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("CLAIM 4: Critical Point at q = 1/2")
+print("Critical Point at q = 1/2")
 print("=" * 80)
 
 print("""
@@ -263,12 +247,8 @@ if result == sat:
 else:
     record_result("Critical Point", "FAILED", "No critical point found")
 
-# =============================================================================
-# CLAIM 5: Fisher Information Identity
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("CLAIM 5: Fisher Information Identity")
+print("Fisher Information Identity")
 print("=" * 80)
 
 print("""
@@ -306,12 +286,8 @@ if result == unsat:
 else:
     record_result("Fisher Information", "FAILED", "Unexpected")
 
-# =============================================================================
-# CLAIM 6: Eigenvalue Condition for Critical Line
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("CLAIM 6: Eigenvalue Reality iff Re(s) = 1/2")
+print("Eigenvalue Reality iff Re(s) = 1/2")
 print("=" * 80)
 
 print("""
@@ -365,12 +341,8 @@ if result6b == unsat:
 else:
     record_result("Backward implication", "FAILED", "Unexpected")
 
-# =============================================================================
-# CLAIM 7: Eigenfunction Power Form
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("CLAIM 7: Eigenfunction Power Form")
+print("Eigenfunction Power Form")
 print("=" * 80)
 
 print("""
@@ -422,12 +394,8 @@ if result == unsat:
 else:
     record_result("Eigenfunction Exponent", "FAILED", "Unexpected")
 
-# =============================================================================
-# CLAIM 8: Conditional RH Implication
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("CLAIM 8: Conditional RH Implication")
+print("Conditional RH Implication")
 print("=" * 80)
 
 print("""
@@ -491,12 +459,8 @@ if result == unsat:
 else:
     record_result("Conditional RH", "FAILED", "Logic error?")
 
-# =============================================================================
-# SUMMARY
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("VERIFICATION SUMMARY")
+print("Summary")
 print("=" * 80)
 
 proven_count = sum(1 for r in verification_results if r['status'] == 'PROVEN')
@@ -564,6 +528,8 @@ print("=" * 80)
 # Save results
 import json
 from pathlib import Path
+from datetime import datetime
+
 results = {
     "total_claims": total_count,
     "proven": proven_count,
@@ -575,3 +541,36 @@ results_file.parent.mkdir(exist_ok=True)
 with open(results_file, 'w') as f:
     json.dump(results, f, indent=2, default=str)
 print(f"\nResults saved to: {results_file}")
+
+# =============================================================================
+# SAVE RAW DATA FOR COMPLETENESS
+# =============================================================================
+print("\n" + "=" * 80)
+print("Saving Raw Data")
+print("=" * 80)
+
+raw_data = {
+    "metadata": {
+        "script": "RH_13_Z3_Verification.py",
+        "generated": datetime.now().isoformat(),
+        "verification_method": "Z3 Theorem Prover"
+    },
+    "summary": {
+        "total_claims": total_count,
+        "proven": proven_count,
+        "failed": total_count - proven_count,
+        "success_rate": proven_count / total_count if total_count > 0 else 0
+    },
+    "verification_results": verification_results,
+    "key_algebraic_identities": {
+        "eigenvalue_equation": "(s-1) + 1/2 = s - 1/2",
+        "critical_line": "Im(lambda) = 1/2 - Re(s)",
+        "symmetry": "q(1-q) = (1-q)q",
+        "eigenfunction_exponent": "a = s - 1 when eigenvalue = -i(s-1/2)"
+    }
+}
+
+raw_file = Path("results/RH_13_Z3_Verification_RAW.json")
+with open(raw_file, 'w') as f:
+    json.dump(raw_data, f, indent=2, default=str)
+print(f"Raw data saved to: {raw_file}")

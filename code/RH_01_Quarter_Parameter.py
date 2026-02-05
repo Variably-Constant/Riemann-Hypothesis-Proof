@@ -39,16 +39,10 @@ def log(msg):
 
 results = {"timestamp": datetime.now().isoformat(), "calculations": []}
 
-# =============================================================================
-# STEP 1: EIGENVALUE EQUATION IN ARC-LENGTH COORDINATES
-# =============================================================================
-
-def step1_arc_length_operator():
-    """
-    Transform the operator to arc-length coordinates and find eigenvalues.
-    """
+def arc_length_operator():
+    """Transform the operator to arc-length coordinates and find eigenvalues."""
     log("="*70)
-    log("STEP 1: OPERATOR IN ARC-LENGTH COORDINATES")
+    log("OPERATOR IN ARC-LENGTH COORDINATES")
     log("="*70)
 
     log("""
@@ -108,16 +102,10 @@ def step1_arc_length_operator():
 
     return True
 
-# =============================================================================
-# STEP 2: EIGENVALUE PROBLEM IN ARC-LENGTH
-# =============================================================================
-
-def step2_eigenvalue_problem():
-    """
-    Solve the eigenvalue problem in arc-length coordinates.
-    """
+def eigenvalue_problem():
+    """Solve the eigenvalue problem in arc-length coordinates."""
     log("\n" + "="*70)
-    log("STEP 2: EIGENVALUE PROBLEM IN ARC-LENGTH COORDINATES")
+    log("EIGENVALUE PROBLEM IN ARC-LENGTH COORDINATES")
     log("="*70)
 
     log("""
@@ -206,16 +194,10 @@ def step2_eigenvalue_problem():
 
     return True
 
-# =============================================================================
-# STEP 3: BOUNDARY CONDITION AND EIGENVALUE QUANTIZATION
-# =============================================================================
-
-def step3_boundary_condition():
-    """
-    Apply the anti-periodic boundary condition and derive eigenvalue quantization.
-    """
+def boundary_condition():
+    """Apply the anti-periodic boundary condition and derive eigenvalue quantization."""
     log("\n" + "="*70)
-    log("STEP 3: BOUNDARY CONDITION AND EIGENVALUE QUANTIZATION")
+    log("BOUNDARY CONDITION AND EIGENVALUE QUANTIZATION")
     log("="*70)
 
     log("""
@@ -289,16 +271,10 @@ def step3_boundary_condition():
 
     return True
 
-# =============================================================================
-# STEP 4: THE KEY DERIVATION - WHY 1/4?
-# =============================================================================
-
-def step4_derive_quarter():
-    """
-    THIS IS THE KEY STEP: Derive WHY the parameter is 1/4.
-    """
+def derive_quarter_parameter():
+    """Derive why the spectral parameter is 1/4."""
     log("\n" + "="*70)
-    log("STEP 4: RIGOROUS DERIVATION OF THE 1/4 PARAMETER")
+    log("DERIVATION OF THE 1/4 PARAMETER")
     log("="*70)
 
     log("""
@@ -389,16 +365,10 @@ def step4_derive_quarter():
 
     return True
 
-# =============================================================================
-# STEP 5: THE COMPLETE CHAIN OF REASONING
-# =============================================================================
-
-def step5_complete_derivation():
-    """
-    Assemble the complete rigorous derivation.
-    """
+def complete_derivation():
+    """Assemble the complete rigorous derivation."""
     log("\n" + "="*70)
-    log("STEP 5: COMPLETE RIGOROUS DERIVATION")
+    log("COMPLETE DERIVATION CHAIN")
     log("="*70)
 
     log("""
@@ -481,16 +451,10 @@ def step5_complete_derivation():
 
     return True
 
-# =============================================================================
-# STEP 6: VERIFY THE TRACE FORMULA MATCHING
-# =============================================================================
-
-def step6_verify_trace_formula():
-    """
-    Verify that the derived smooth term matches numerically.
-    """
+def verify_trace_formula():
+    """Verify that the derived smooth term matches numerically."""
     log("\n" + "="*70)
-    log("STEP 6: VERIFICATION - SMOOTH TERM MATCHING")
+    log("VERIFICATION: SMOOTH TERM MATCHING")
     log("="*70)
 
     def Phi_BK(t):
@@ -529,25 +493,18 @@ def step6_verify_trace_formula():
 
     return max_diff < 1e-14
 
-# =============================================================================
-# MAIN
-# =============================================================================
-
 def main():
     log("="*70)
-    log("RIGOROUS DERIVATION OF THE 1/4 PARAMETER")
+    log("DERIVATION OF THE 1/4 PARAMETER")
     log("="*70)
     log(f"Start time: {datetime.now()}")
-    log("")
-    log("This script provides a RIGOROUS DERIVATION with NO ASSERTIONS.")
-    log("")
 
-    step1_arc_length_operator()
-    step2_eigenvalue_problem()
-    step3_boundary_condition()
-    step4_derive_quarter()
-    step5_complete_derivation()
-    success = step6_verify_trace_formula()
+    arc_length_operator()
+    eigenvalue_problem()
+    boundary_condition()
+    derive_quarter_parameter()
+    complete_derivation()
+    success = verify_trace_formula()
 
     log("\n" + "="*70)
     log("FINAL SUMMARY")
@@ -601,6 +558,90 @@ def main():
     with open(results_file, 'w', encoding='utf-8') as f:
         json.dump(convert_numpy(results), f, indent=2)
     log(f"\nResults saved to {results_file}")
+
+    # =============================================================================
+    # SAVE RAW DATA FOR FIGURE GENERATION
+    # =============================================================================
+    log("\n" + "=" * 70)
+    log("Saving Raw Data for Figures")
+    log("=" * 70)
+
+    # Arc-length data
+    q_vals_arc = np.linspace(0.001, 0.999, 500)
+    s_vals_arc = 2 * np.arcsin(np.sqrt(q_vals_arc))
+
+    # Arc-length integrand
+    arc_integrand_vals = 1 / np.sqrt(q_vals_arc * (1 - q_vals_arc))
+
+    # Eigenfunction test data
+    test_s_vals = [0.5, 1.0, 1.5, 2.0, 2.5]
+    test_lambda = 14.134725  # First zeta zero
+    eigenfunction_data = []
+    for s in test_s_vals:
+        q = np.sin(s/2)**2
+        psi_q = q**(1j*test_lambda - 0.5)
+        psi_s = np.sin(s/2)**(2*1j*test_lambda - 1)
+        eigenfunction_data.append({
+            "s": s,
+            "q": float(q),
+            "abs_psi_q": float(abs(psi_q)),
+            "abs_psi_s": float(abs(psi_s))
+        })
+
+    # Spectral zeta identity verification
+    def odd_sum(s_val, N=10000):
+        return sum((2*n + 1)**(-s_val) for n in range(N))
+
+    def hurwitz_half(s_val, N=10000):
+        return sum((n + 0.5)**(-s_val) for n in range(N))
+
+    spectral_zeta_data = {}
+    for s_val in [2.0, 3.0, 4.0, 5.0]:
+        odd = odd_sum(s_val)
+        hurwitz = hurwitz_half(s_val)
+        ratio = odd * (2**s_val)
+        spectral_zeta_data[f"s_{s_val}"] = {
+            "odd_sum": float(odd),
+            "hurwitz_half": float(hurwitz),
+            "ratio_times_2s": float(ratio),
+            "match": bool(np.isclose(ratio, hurwitz, rtol=1e-3))
+        }
+
+    # Phi comparison at various t
+    def phi_derived(t):
+        z = 0.25 + 0.5j * t
+        return special.digamma(z).real + np.log(np.pi) / 2
+
+    t_vals_phi = np.array([10, 20, 30, 50, 100])
+    phi_vals = np.array([phi_derived(t) for t in t_vals_phi])
+
+    raw_data = {
+        "metadata": {
+            "script": "RH_01_Quarter_Parameter.py",
+            "generated": datetime.now().isoformat()
+        },
+        "arc_length": {
+            "q_vals": q_vals_arc.tolist(),
+            "s_vals": s_vals_arc.tolist(),
+            "integrand_vals": arc_integrand_vals.tolist(),
+            "total_arc_length": float(np.pi)
+        },
+        "eigenfunction_test": {
+            "lambda": test_lambda,
+            "points": eigenfunction_data
+        },
+        "spectral_zeta_identity": spectral_zeta_data,
+        "phi_verification": {
+            "t_vals": t_vals_phi.tolist(),
+            "phi_vals": phi_vals.tolist()
+        },
+        "key_result": "1/4 = (1/2)/2 from Gamma(s/2) at s = 1/2"
+    }
+
+    raw_file = Path("results/RH_01_Quarter_Parameter_RAW.json")
+    with open(raw_file, 'w', encoding='utf-8') as f:
+        json.dump(raw_data, f, indent=2)
+    log(f"Raw data saved to {raw_file}")
 
 if __name__ == "__main__":
     main()

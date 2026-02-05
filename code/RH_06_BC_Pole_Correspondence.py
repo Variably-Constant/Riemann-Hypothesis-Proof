@@ -572,5 +572,59 @@ def main():
         json.dump(results, f, indent=2, default=str)
     log(f"\nResults saved to {results_file}")
 
+    # =============================================================================
+    # SAVE RAW DATA FOR FIGURE GENERATION
+    # =============================================================================
+    log("\n" + "=" * 70)
+    log("Saving Raw Data")
+    log("=" * 70)
+
+    # Compute Gamma function values at 1/4 + iz/2 for various z
+    known_zeros = [14.134725, 21.022040, 25.010858, 30.424876, 32.935062]
+    z_values = np.linspace(0, 60, 200)
+    gamma_abs_values = [abs(special.gamma(0.25 + 0.5j * z)) for z in z_values]
+
+    # Compute Dirichlet beta function for various s
+    def dirichlet_beta(s, terms=10000):
+        return sum((-1)**n / (2*n + 1)**s for n in range(terms))
+
+    s_values = np.linspace(0.5, 5.0, 50)
+    beta_values = [dirichlet_beta(s) for s in s_values]
+
+    # Compute Beta function (modified Mellin transform) for test values
+    lambda_test_values = np.linspace(10, 50, 20)
+    s_test = 2.0
+    beta_transform_values = []
+    for lam in lambda_test_values:
+        a = s_test + 1j * lam - 0.5
+        val = special.gamma(a) * special.gamma(0.5) / special.gamma(a + 0.5)
+        beta_transform_values.append({"lambda": lam, "real": val.real, "imag": val.imag})
+
+    raw_data = {
+        "metadata": {
+            "script": "RH_06_BC_Pole_Correspondence.py",
+            "generated": datetime.now().isoformat()
+        },
+        "known_zeros": known_zeros,
+        "gamma_function_on_line": {
+            "z_values": z_values.tolist(),
+            "gamma_abs_values": gamma_abs_values
+        },
+        "dirichlet_beta": {
+            "s_values": s_values.tolist(),
+            "beta_values": beta_values
+        },
+        "beta_transform_test": {
+            "s_fixed": s_test,
+            "values": beta_transform_values
+        },
+        "verifications": results["verifications"]
+    }
+
+    raw_file = Path("results/RH_06_BC_Pole_Correspondence_RAW.json")
+    with open(raw_file, 'w', encoding='utf-8') as f:
+        json.dump(raw_data, f, indent=2, default=str)
+    log(f"Raw data saved to {raw_file}")
+
 if __name__ == "__main__":
     main()

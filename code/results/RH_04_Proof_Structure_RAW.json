@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "script": "RH_04_Proof_Structure.py",
+    "generated": "2026-02-04T18:35:27.313648"
+  },
+  "zeta_zeros": [
+    14.134725141734695,
+    21.022039638771556,
+    25.01085758014569,
+    30.424876125859512,
+    32.93506158773919
+  ],
+  "proof_structure": {
+    "step_1": "Define operator H and Hilbert space",
+    "step_2": "Prove self-adjoint extension with alpha = pi",
+    "step_3": "Derive smooth term matching",
+    "step_4": "Derive oscillating term matching (Gutzwiller)",
+    "step_5": "Apply spectral measure uniqueness",
+    "step_6": "Conclude Spec(H_pi) = {gamma_n}",
+    "step_7": "Self-adjointness => real eigenvalues => RH"
+  },
+  "key_insight": "Pole-zero correspondence is explanatory, not a proof step"
+}

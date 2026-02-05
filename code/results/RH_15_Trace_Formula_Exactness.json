@@ -1,0 +1,94 @@
+{
+  "timestamp": "2026-02-04T18:36:03.373371",
+  "tests": [
+    {
+      "test": "smooth_term_exactness",
+      "max_difference": 0.0,
+      "is_exact": true,
+      "num_test_points": 1000
+    },
+    {
+      "test": "oscillating_term_structure",
+      "von_mangoldt_correct": true,
+      "sample_values": {
+        "10": 0.23502772402534058,
+        "14.13": -6.924864980301718,
+        "21.02": -5.500225996795624
+      }
+    },
+    {
+      "test": "trace_formula_structure",
+      "part_a_asymptotic_diff": 0.7013953733518932,
+      "part_a_pass": "True",
+      "part_b_pnt_ratio": 0.9995919384475814,
+      "part_b_pass": "True",
+      "part_c_avg_diff": 0.3256191908534784,
+      "part_c_pass": "True",
+      "all_pass": "True"
+    },
+    {
+      "test": "spectral_density_integration",
+      "test_values": [
+        {
+          "T": 20,
+          "N_smooth": 5.900817671225976,
+          "N_exact": 1
+        },
+        {
+          "T": 30,
+          "N_smooth": 10.82073606176858,
+          "N_exact": 3
+        },
+        {
+          "T": 40,
+          "N_smooth": 16.28151517086867,
+          "N_exact": 6
+        },
+        {
+          "T": 50,
+          "N_smooth": 22.14445563460647,
+          "N_exact": 10
+        },
+        {
+          "T": 60,
+          "N_smooth": 28.327873803745863,
+          "N_exact": 13
+        }
+      ],
+      "average_error": 10.09507966844311
+    },
+    {
+      "test": "eigenvalue_equation",
+      "all_match": true,
+      "test_lambdas": [
+        14.134725141734695,
+        21.022039638771556,
+        25.01085758014569,
+        30.424876125859512,
+        32.93506158773919
+      ]
+    },
+    {
+      "test": "mellin_diagonalization",
+      "ratio_computed": "(-0.2999999144284656+0.9999999300713159j)",
+      "ratio_expected": "(-0.3+1j)",
+      "match": true
+    },
+    {
+      "test": "arc_length",
+      "beta_function_value": 3.1415926535897927,
+      "gamma_half": 1.7724538509055159,
+      "sqrt_pi": 1.7724538509055159,
+      "beta_diff_from_pi": 4.440892098500626e-16,
+      "method1_exact": "True",
+      "method2_exact": true,
+      "numerical_value": 3.1415926535886456,
+      "is_exact": true
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "total": 7,
+    "success_rate": 1.0
+  }
+}

@@ -7,7 +7,8 @@
 
 **Author:** Mark Newton
 **Affiliation:** Independent Researcher
-**Date:** February 3, 2026
+**Date:** February 4, 2026
+**Version:** 3.0
 **DOI:** [10.5281/zenodo.18473594](https://doi.org/10.5281/zenodo.18473594)
 
 ---
@@ -25,8 +26,8 @@ This repository contains a proof of the Riemann Hypothesis using the Berry-Keati
 ```
 Publish/
 ├── paper/
-│   └── RH_Proof_V2.tex              # LaTeX paper
-│   └── RH_Proof_V2.pdf              # Compiled PDF
+│   └── RH_Proof_V3.tex              # LaTeX paper
+│   └── RH_Proof_V3.pdf              # Compiled PDF
 ├── code/
 │   ├── RH_01_Quarter_Parameter.py   # 1/4 parameter verification
 │   ├── RH_02_Smooth_Term.py         # Smooth term analysis
@@ -70,8 +71,8 @@ Publish/
 
 ```bash
 cd paper
-pdflatex RH_Proof_V2.tex
-pdflatex RH_Proof_V2.tex  # Run twice for references
+pdflatex RH_Proof_V3.tex
+pdflatex RH_Proof_V3.tex  # Run twice for references
 ```
 
 ---

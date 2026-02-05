@@ -7,7 +7,7 @@ Numerical computation of Berry-Keating eigenvalues and comparison with
 Riemann zeros. Uses multiple discretization methods and extrapolation
 to the continuum limit.
 
-Author: Numerical Analysis
+Author: Mark Newton
 Date: January 30, 2026
 """
 
@@ -22,10 +22,6 @@ print("RIGOROUS EIGENVALUE SIMULATION")
 print("Berry-Keating Operator vs Riemann Zeros")
 print("=" * 80)
 
-# =============================================================================
-# KNOWN RIEMANN ZEROS
-# =============================================================================
-
 # First 30 non-trivial zeros (imaginary parts)
 RIEMANN_ZEROS = np.array([
     14.134725142, 21.022039639, 25.010857580, 30.424876126, 32.935061588,
@@ -39,12 +35,8 @@ RIEMANN_ZEROS = np.array([
 print(f"\nLoaded {len(RIEMANN_ZEROS)} known Riemann zeros")
 print(f"Range: gamma_1 = {RIEMANN_ZEROS[0]:.6f} to gamma_30 = {RIEMANN_ZEROS[-1]:.6f}")
 
-# =============================================================================
-# METHOD 1: FINITE ELEMENT DISCRETIZATION WITH FISHER WEIGHT
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("METHOD 1: Finite Element with Fisher Weight")
+print("Finite Element with Fisher Weight")
 print("=" * 80)
 
 def create_fem_matrices(N, alpha=np.pi):
@@ -123,12 +115,8 @@ for N in [50, 100, 200, 400]:
         real_eigs = np.sort(np.abs(eigs.real))[:5]
         print(f"  N = {N:3d}: Real parts = {real_eigs}")
 
-# =============================================================================
-# METHOD 2: SPECTRAL METHOD (CHEBYSHEV)
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("METHOD 2: Chebyshev Spectral Method")
+print("Chebyshev Spectral Method")
 print("=" * 80)
 
 def chebyshev_diff_matrix(N):
@@ -197,12 +185,8 @@ try:
 except Exception as e:
     print(f"  Error: {e}")
 
-# =============================================================================
-# METHOD 3: WIGNER-DYSON STATISTICS COMPARISON
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("METHOD 3: Wigner-Dyson Statistics")
+print("Wigner-Dyson Statistics")
 print("=" * 80)
 
 def nearest_neighbor_spacing(eigenvalues):
@@ -238,12 +222,8 @@ gue_variance = (4 - np.pi) / np.pi  # Wigner surmise variance
 print(f"GUE prediction mean: {gue_mean:.4f}")
 print(f"GUE prediction variance: {gue_variance:.4f}")
 
-# =============================================================================
-# METHOD 4: DIRECT COMPARISON WITH TRACE FORMULA
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("METHOD 4: Trace Formula Verification")
+print("Trace Formula Verification")
 print("=" * 80)
 
 def weyl_count(T):
@@ -273,12 +253,8 @@ for T in [50, 100, 150, 200]:
     error = abs(weyl_N - actual_N)
     print(f"  T = {T:3d}: Weyl N(T) = {weyl_N:6.2f}, Actual = {actual_N:2d}, Error = {error:.2f}")
 
-# =============================================================================
-# METHOD 5: PRIME SUM VERIFICATION
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("METHOD 5: Prime Sum in Explicit Formula")
+print("Prime Sum in Explicit Formula")
 print("=" * 80)
 
 def is_prime(n):
@@ -324,12 +300,8 @@ for i, gamma in enumerate(RIEMANN_ZEROS[:5]):
     osc_sum = explicit_formula_sum(gamma, max_n=500)
     print(f"  gamma_{i+1} = {gamma:.6f}: oscillatory sum = {osc_sum:+.4f}")
 
-# =============================================================================
-# CORRELATION ANALYSIS
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("CORRELATION ANALYSIS")
+print("Correlation Analysis")
 print("=" * 80)
 
 def compute_correlations():
@@ -370,12 +342,8 @@ def compute_correlations():
 
 correlations = compute_correlations()
 
-# =============================================================================
-# SUMMARY
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("VERIFICATION SUMMARY")
+print("Summary")
 print("=" * 80)
 
 summary = {
@@ -400,55 +368,15 @@ summary = {
     }
 }
 
-print("""
-================================================================================
-                    NUMERICAL VERIFICATION COMPLETE
-================================================================================
+print(f"""
+Weyl law correlation: {correlations.get('weyl_correlation', 0):.4f}
+GUE CDF correlation: {correlations.get('gue_cdf_correlation', 0):.4f}
 
-The numerical simulations confirm:
-
-1. WEYL LAW [VERIFIED]
-   - N(T) ~ (T/2*pi) * log(T/(2*pi)) matches zero count
-   - Correlation: {:.4f}
-
-2. GUE STATISTICS [VERIFIED]
-   - Riemann zeros follow GUE spacing distribution
-   - CDF correlation: {:.4f}
-
-3. EXPLICIT FORMULA [VERIFIED]
-   - Prime sum computes correctly
-   - von Mangoldt function implemented
-
-4. TRACE FORMULA STRUCTURE [VERIFIED]
-   - Weyl density matches
-   - Oscillatory term has correct sign with e^{{i*pi}} = -1
-   - Spectral correspondence is consistent
-
-================================================================================
-NOTE ON DIRECT EIGENVALUE COMPUTATION:
-================================================================================
-
-The direct discretization of the Berry-Keating operator on [0,1] with weight
-w(q) = 1/(q(1-q)) is numerically challenging due to:
-
-1. Singular weight at q = 0 and q = 1
-2. Continuous spectrum for the uncompactified operator
-3. Boundary condition implementation
-
-The THEORETICAL proof does not rely on numerical eigenvalue computation.
-Instead, it uses:
-- Trace formula matching (verified symbolically)
-- Uniqueness of spectral measure (functional analysis)
-- Self-adjointness (von Neumann theory)
-
-The numerical tests above verify the STRUCTURE of the proof, not the
-eigenvalues directly.
-
-================================================================================
-""".format(
-    correlations.get('weyl_correlation', 0),
-    correlations.get('gue_cdf_correlation', 0)
-))
+Note: Direct discretization of the Berry-Keating operator is numerically
+challenging due to singular weight at endpoints. The theoretical proof uses
+trace formula matching and spectral measure uniqueness, not direct eigenvalue
+computation.
+""")
 
 # Save results
 from pathlib import Path
@@ -458,4 +386,103 @@ with open(results_file, 'w') as f:
     json.dump(summary, f, indent=2, default=str)
 
 print(f"Results saved to: {results_file}")
+
+# =============================================================================
+# SAVE RAW DATA FOR FIGURE GENERATION
+# =============================================================================
+print("\n" + "=" * 80)
+print("Saving Raw Data for Figures")
+print("=" * 80)
+
+# Recompute arrays for figure data
+T_vals_weyl = np.linspace(10, 105, 200)
+weyl_N_array = np.array([weyl_count(T) for T in T_vals_weyl])
+actual_N_array = np.array([np.sum(RIEMANN_ZEROS < T) for T in T_vals_weyl])
+
+# Spacings for GUE
+spacings_raw = np.diff(RIEMANN_ZEROS)
+mean_spacing = np.mean(spacings_raw)
+spacings_normalized = spacings_raw / mean_spacing
+
+# GUE distribution data
+s_vals_gue = np.linspace(0, 3, 200)
+gue_pdf_vals = (32 / np.pi**2) * s_vals_gue**2 * np.exp(-4 * s_vals_gue**2 / np.pi)
+
+# GUE CDF
+empirical_cdf_array = np.array([np.mean(spacings_normalized < s) for s in s_vals_gue])
+gue_cdf_array = 1 - np.exp(-4 * s_vals_gue**2 / np.pi) * (1 + 4 * s_vals_gue**2 / np.pi)
+gue_cdf_array[s_vals_gue == 0] = 0
+
+# Oscillating sum for trace formula
+t_vals_osc = np.linspace(10, 50, 400)
+osc_sum_array = []
+for t in t_vals_osc:
+    total = 0.0
+    for n in range(2, 501):
+        L_n = von_mangoldt(n)
+        if L_n > 0:
+            total += L_n / np.sqrt(n) * np.cos(t * np.log(n))
+    osc_sum_array.append(-2 * total)
+osc_sum_array = np.array(osc_sum_array)
+
+# Periodic orbits / von Mangoldt amplitudes
+n_range_vM = list(range(2, 51))
+amplitudes_vM = [von_mangoldt(n) / np.sqrt(n) for n in n_range_vM]
+
+# Prime powers for orbit periods
+primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]
+prime_powers_data = []
+for p in primes[:6]:
+    for m in range(1, 5):
+        if p**m <= 100:
+            prime_powers_data.append({
+                "n": p**m,
+                "p": p,
+                "m": m,
+                "period": float(np.log(p**m))
+            })
+prime_powers_data.sort(key=lambda x: x["n"])
+
+raw_data = {
+    "metadata": {
+        "script": "RH_11_Eigenvalue_Simulation.py",
+        "generated": str(datetime.now()) if 'datetime' in dir() else "2026-02-04"
+    },
+    "riemann_zeros": RIEMANN_ZEROS.tolist(),
+    "figure3_weyl_counting": {
+        "T_vals": T_vals_weyl.tolist(),
+        "weyl_N": weyl_N_array.tolist(),
+        "actual_N": actual_N_array.tolist()
+    },
+    "figure4_gue_statistics": {
+        "spacings_normalized": spacings_normalized.tolist(),
+        "s_vals": s_vals_gue.tolist(),
+        "gue_pdf": gue_pdf_vals.tolist(),
+        "empirical_cdf": empirical_cdf_array.tolist(),
+        "gue_cdf": gue_cdf_array.tolist(),
+        "mean_spacing": float(mean_spacing)
+    },
+    "figure5_trace_formula": {
+        "t_vals": t_vals_osc.tolist(),
+        "oscillating_sum": osc_sum_array.tolist()
+    },
+    "figure8_periodic_orbits": {
+        "n_range": n_range_vM,
+        "amplitudes": amplitudes_vM,
+        "prime_powers": prime_powers_data
+    }
+}
+
+# Import datetime if not already
+try:
+    from datetime import datetime
+    raw_data["metadata"]["generated"] = datetime.now().isoformat()
+except:
+    pass
+
+raw_file = Path("results/RH_11_Eigenvalue_Simulation_RAW.json")
+with open(raw_file, 'w') as f:
+    json.dump(raw_data, f, indent=2)
+
+print(f"Raw data saved to: {raw_file}")
 print("=" * 80)

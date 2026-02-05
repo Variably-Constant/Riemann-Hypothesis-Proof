@@ -418,5 +418,53 @@ def main():
 
     save_checkpoint({"status": "complete", "timestamp": datetime.now().isoformat()})
 
+    # =============================================================================
+    # SAVE RAW DATA FOR FIGURE GENERATION
+    # =============================================================================
+    log("\n" + "=" * 70)
+    log("Saving Raw Data")
+    log("=" * 70)
+
+    # Compute Z function values for plotting
+    t_values = np.linspace(10, 55, 500)
+    Z_values = [Z_function(t) for t in t_values]
+
+    # Compute explicit formula sums at various t values
+    explicit_t_values = np.linspace(10, 50, 50)
+    explicit_sums = [explicit_formula_sum(t, N_max=2000) for t in explicit_t_values]
+
+    # Compute xi function values near zeros
+    xi_near_zeros = []
+    for gamma in KNOWN_ZEROS[:5]:
+        t_near = np.linspace(gamma - 1, gamma + 1, 50)
+        xi_vals = [abs(xi_function(t)) for t in t_near]
+        xi_near_zeros.append({
+            "gamma": gamma,
+            "t_values": t_near.tolist(),
+            "xi_abs_values": xi_vals
+        })
+
+    raw_data = {
+        "metadata": {
+            "script": "RH_05_Spectral_Determinant.py",
+            "generated": datetime.now().isoformat()
+        },
+        "known_zeros": KNOWN_ZEROS,
+        "Z_function": {
+            "t_values": t_values.tolist(),
+            "Z_values": Z_values
+        },
+        "explicit_formula": {
+            "t_values": explicit_t_values.tolist(),
+            "sum_values": explicit_sums
+        },
+        "xi_near_zeros": xi_near_zeros
+    }
+
+    raw_file = Path("results/RH_05_Spectral_Determinant_RAW.json")
+    with open(raw_file, 'w', encoding='utf-8') as f:
+        json.dump(raw_data, f, indent=2)
+    log(f"Raw data saved to {raw_file}")
+
 if __name__ == "__main__":
     main()

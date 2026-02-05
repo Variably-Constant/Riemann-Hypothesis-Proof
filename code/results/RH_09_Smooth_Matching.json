@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-02-04T18:35:42.717540",
+  "proven": [
+    "Smooth term Phi_BK(t) = Re[psi(1/4 + it/2)] + log(pi)/2",
+    "This equals Riemann-Weil smooth term Phi_RW(t)",
+    "Combined with oscillating term matching, spectra must be equal"
+  ],
+  "conclusion": "Spec(H_pi) = {gamma_n : zeta(1/2 + i*gamma_n) = 0}"
+}

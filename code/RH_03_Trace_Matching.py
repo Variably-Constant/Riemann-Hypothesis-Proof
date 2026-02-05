@@ -542,5 +542,84 @@ def main():
         json.dump(results, f, indent=2, default=str)
     log(f"\nResults saved to {results_file}")
 
+    # =============================================================================
+    # SAVE RAW DATA FOR FIGURE GENERATION
+    # =============================================================================
+    log("\n" + "=" * 70)
+    log("Saving Raw Data")
+    log("=" * 70)
+
+    def von_mangoldt_raw(n):
+        if n < 2:
+            return 0.0
+        for p in range(2, int(n**0.5) + 2):
+            if p * p > n:
+                return np.log(n)
+            if n % p == 0:
+                power = p
+                while power < n:
+                    power *= p
+                if power == n:
+                    return np.log(p)
+                return 0.0
+        return 0.0
+
+    def Phi_smooth(t):
+        z = 0.25 + 0.5j * t
+        return special.digamma(z).real + np.log(np.pi) / 2
+
+    # Smooth term comparison data
+    test_points_raw = [10.0, 20.0, 30.0, 50.0, 100.0, 200.0]
+    phi_values = [Phi_smooth(t) for t in test_points_raw]
+
+    # Oscillating sum data
+    t_vals_osc = np.linspace(10, 50, 200)
+    def oscillating_sum_raw(t, N_max=2000):
+        total = 0.0
+        for n in range(2, N_max + 1):
+            L = von_mangoldt_raw(n)
+            if L > 0:
+                total += L / np.sqrt(n) * np.cos(t * np.log(n))
+        return total
+
+    osc_values = [oscillating_sum_raw(t) for t in t_vals_osc]
+
+    # Monodromy data
+    def monodromy_raw(lam, eps=1e-6):
+        ratio = (1 - eps) / eps
+        return ratio ** (1j * lam - 0.5)
+
+    monodromy_data = []
+    for gamma in KNOWN_ZEROS:
+        M = monodromy_raw(gamma)
+        monodromy_data.append({
+            "gamma": gamma,
+            "M_real": float(M.real),
+            "M_imag": float(M.imag),
+            "M_abs": float(abs(M))
+        })
+
+    raw_data = {
+        "metadata": {
+            "script": "RH_03_Trace_Matching.py",
+            "generated": datetime.now().isoformat()
+        },
+        "known_zeros": KNOWN_ZEROS,
+        "smooth_term": {
+            "t_vals": test_points_raw,
+            "Phi_vals": phi_values
+        },
+        "oscillating_sum": {
+            "t_vals": t_vals_osc.tolist(),
+            "values": osc_values
+        },
+        "monodromy": monodromy_data
+    }
+
+    raw_file = Path("results/RH_03_Trace_Matching_RAW.json")
+    with open(raw_file, 'w', encoding='utf-8') as f:
+        json.dump(raw_data, f, indent=2)
+    log(f"Raw data saved to {raw_file}")
+
 if __name__ == "__main__":
     main()

@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-02-04T18:35:27.890500",
+  "zeros_found": [
+    {
+      "index": 1,
+      "found": 14.137311486436209,
+      "known": 14.134725141734695,
+      "error": 0.0025863447015144203
+    },
+    {
+      "index": 2,
+      "found": 21.023406237417127,
+      "known": 21.022039638771556,
+      "error": 0.0013665986455713153
+    },
+    {
+      "index": 3,
+      "found": 25.011640562168672,
+      "known": 25.01085758014569,
+      "error": 0.000782982022982992
+    },
+    {
+      "index": 4,
+      "found": 30.425909712436585,
+      "known": 30.424876125859512,
+      "error": 0.0010335865770727537
+    },
+    {
+      "index": 5,
+      "found": 32.9334756404946,
+      "known": 32.93506158773919,
+      "error": 0.0015859472445924894
+    },
+    {
+      "index": 6,
+      "found": 37.58393222182,
+      "known": 37.586178158825675,
+      "error": 0.0022459370056751027
+    },
+    {
+      "index": 7,
+      "found": 40.91921700926499,
+      "known": 40.9187190121475,
+      "error": 0.0004979971174918774
+    },
+    {
+      "index": 8,
+      "found": 43.32645474065286,
+      "known": 43.327073280915,
+      "error": 0.0006185402621383673
+    },
+    {
+      "index": 9,
+      "found": 48.00386000563716,
+      "known": 48.00515088116716,
+      "error": 0.0012908755300031771
+    },
+    {
+      "index": 10,
+      "found": 49.77344200423156,
+      "known": 49.7738324776723,
+      "error": 0.00039047344073850354
+    }
+  ],
+  "explicit_formula_test": [
+    {
+      "t": 14.0,
+      "explicit_sum": -7.0844270590986245
+    },
+    {
+      "t": 21.0,
+      "explicit_sum": -5.867610705516933
+    },
+    {
+      "t": 25.0,
+      "explicit_sum": -4.970810426368048
+    },
+    {
+      "t": 30.0,
+      "explicit_sum": 2.2925908036003957
+    },
+    {
+      "t": 40.0,
+      "explicit_sum": 1.2681751553796872
+    }
+  ],
+  "conclusions": [
+    "The Z function correctly locates zeta zeros",
+    "The explicit formula sum reproduces expected oscillations",
+    "The spectral determinant calculation requires careful regularization",
+    "Direct numerical verification supports the correspondence"
+  ]
+}

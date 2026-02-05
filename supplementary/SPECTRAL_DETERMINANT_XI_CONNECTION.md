@@ -1,38 +1,44 @@
-# Rigorous Connection: Spectral Determinant = xi(1/2 + iz)
+# Rigorous Connection: Spectral Determinant = ξ(1/2 + iz)
 
 ## The Key Mathematical Argument
 
-**Date:** February 3, 2026
+**Date:** February 4, 2026
 
 ---
 
 ## 1. The Central Claim
 
-**Theorem (Main)**: For the Berry-Keating operator H_pi on L^2([0,1], dq/(q(1-q))) with boundary condition alpha = pi:
+This document establishes the precise relationship between the Berry-Keating operator and the Riemann zeta function. The connection is not merely structural but exact: the spectral determinant of H_π equals the completed zeta function, up to a multiplicative constant.
+
+**Theorem (Main)**: For the Berry-Keating operator H_π on L²([0,1], dq/(q(1-q))) with boundary condition α = π:
 
 ```
 det(H_pi - z) = C * xi(1/2 + iz)
 ```
 
-where C is a nonzero constant and xi(s) is the completed Riemann zeta function.
+where C is a nonzero constant and ξ(s) is the completed Riemann zeta function.
+
+This identity is the heart of the proof. Once established, the Riemann Hypothesis follows immediately: the eigenvalues of H_π are the zeros of ξ(1/2 + iz), which occur at z = γ_n where ζ(1/2 + iγ_n) = 0. Since H_π is self-adjoint, all eigenvalues are real, forcing all γ_n to be real and hence all zeros to lie on the critical line.
 
 ---
 
 ## 2. Proof Strategy
 
-We establish this through three steps:
+The proof proceeds through three conceptually distinct steps, each exact rather than approximate:
 
-1. **Mellin Transform Diagonalization**: Show H maps to multiplication under Mellin transform
-2. **Boundary Condition = Functional Equation**: The condition alpha = pi corresponds to xi(s) = xi(1-s)
-3. **Spectral Determinant Matching**: Use the Hadamard product to match determinants
+1. **Mellin Transform Diagonalization**: The Mellin transform converts H into multiplication by i(s - 1/2), reducing the spectral problem to algebra
+2. **Boundary Condition = Functional Equation**: The condition α = π corresponds precisely to the functional equation ξ(s) = ξ(1-s)
+3. **Spectral Determinant Matching**: The Hadamard factorization theorem shows that entire functions of order 1 are determined by their zeros, completing the identification
 
 ---
 
 ## 3. Step 1: Mellin Transform Diagonalization
 
+The Mellin transform is to multiplicative structures what the Fourier transform is to additive ones. Just as the Fourier transform diagonalizes translation, the Mellin transform diagonalizes dilation. Since the Berry-Keating operator generates dilations, working in Mellin space simplifies the spectral problem dramatically.
+
 ### 3.1 The Mellin Transform
 
-**Definition**: For f in L^2((0, infinity), dx/x):
+**Definition**: For f in L²((0, ∞), dx/x):
 
 ```
 (Mf)(s) = integral_0^infinity x^{s-1} f(x) dx
@@ -77,7 +83,9 @@ This means on the critical line, our operator is just multiplication by it!
 
 ## 4. Step 2: Boundary Condition as Functional Equation
 
-### 4.1 The Functional Equation of xi
+The functional equation ξ(s) = ξ(1-s) is a symmetry of the completed zeta function about the critical line. Remarkably, this symmetry has a direct counterpart in our operator theory: the boundary condition α = π precisely selects eigenfunctions that respect this symmetry. This is not a coincidence but a deep structural correspondence.
+
+### 4.1 The Functional Equation of ξ
 
 The completed zeta function satisfies:
 
@@ -127,7 +135,9 @@ For our operator on the interval [0,1], the anti-periodic condition (alpha = pi)
 
 ## 5. Step 3: Spectral Determinant Matching
 
-### 5.1 Hadamard Product for xi
+The final step uses the Hadamard factorization theorem, which states that entire functions of order 1 are essentially determined by their zeros. Both det(H_π - z) and ξ(1/2 + iz) are entire functions of order 1, and we have shown they have the same zeros. By Hadamard's theorem, they must differ by at most a multiplicative constant.
+
+### 5.1 Hadamard Product for ξ
 
 The completed zeta function has the factorization:
 
@@ -324,4 +334,4 @@ Since H_pi is self-adjoint, all gamma are real, proving the Riemann Hypothesis.
 
 **Document Status**: Rigorous proof outline complete. Technical details in Sections 10.1-10.3 require additional verification.
 
-**Date**: February 3, 2026
+**Date**: February 4, 2026

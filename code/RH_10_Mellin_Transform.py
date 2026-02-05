@@ -620,10 +620,92 @@ results = {
 }
 
 from pathlib import Path
+from datetime import datetime
 results_file = Path("results/RH_10_Mellin_Transform.json")
 results_file.parent.mkdir(exist_ok=True)
 with open(results_file, 'w') as f:
     json.dump(results, f, indent=2)
 
 print(f"\nResults saved to: {results_file}")
+
+# =============================================================================
+# SAVE RAW DATA FOR FIGURE GENERATION
+# =============================================================================
+print("\n" + "=" * 80)
+print("Saving Raw Data")
+print("=" * 80)
+
+# Von Mangoldt function values
+n_values = list(range(1, 101))
+mangoldt_values = [von_mangoldt(n) for n in n_values]
+
+# Explicit formula test - Gaussian test function
+sigma_values = [2.0, 5.0, 10.0, 20.0]
+explicit_formula_tests = []
+for sigma in sigma_values:
+    lhs = sum(gaussian_test(gamma, sigma) for gamma in zeros)
+    oscillatory = sum(von_mangoldt(n) / np.sqrt(n) * gaussian_hat(np.log(n), sigma)
+                      for n in range(2, 1001) if von_mangoldt(n) > 0)
+    explicit_formula_tests.append({
+        "sigma": sigma,
+        "lhs_sum_over_zeros": lhs,
+        "oscillatory_term": oscillatory
+    })
+
+# Boundary phase verification
+alpha_values = np.linspace(0, 2*np.pi, 100)
+boundary_phases_real = [np.cos(alpha) for alpha in alpha_values]
+boundary_phases_imag = [np.sin(alpha) for alpha in alpha_values]
+
+# Divisor sum verification: sum_{d|n} Lambda(d) = log(n)
+divisor_sum_verification = []
+for n in range(2, 31):
+    divisor_sum = sum(von_mangoldt(d) for d in range(1, n+1) if n % d == 0)
+    divisor_sum_verification.append({
+        "n": n,
+        "sum_Lambda_d": divisor_sum,
+        "log_n": np.log(n),
+        "error": abs(divisor_sum - np.log(n))
+    })
+
+# Prime power detection
+prime_powers = []
+for n in range(2, 101):
+    L = von_mangoldt(n)
+    if L > 0:
+        # Find the prime base
+        for p in range(2, n+1):
+            if is_prime(p):
+                m = 1
+                while p**m <= n:
+                    if p**m == n:
+                        prime_powers.append({"n": n, "p": p, "m": m, "Lambda": L})
+                        break
+                    m += 1
+
+raw_data = {
+    "metadata": {
+        "script": "RH_10_Mellin_Transform.py",
+        "generated": datetime.now().isoformat()
+    },
+    "zeros_used": zeros,
+    "von_mangoldt": {
+        "n_values": n_values,
+        "Lambda_values": mangoldt_values
+    },
+    "explicit_formula_tests": explicit_formula_tests,
+    "boundary_phase": {
+        "alpha_values": alpha_values.tolist(),
+        "real_part": boundary_phases_real,
+        "imag_part": boundary_phases_imag
+    },
+    "divisor_sum_verification": divisor_sum_verification,
+    "prime_powers": prime_powers
+}
+
+raw_file = Path("results/RH_10_Mellin_Transform_RAW.json")
+with open(raw_file, 'w') as f:
+    json.dump(raw_data, f, indent=2)
+
+print(f"Raw data saved to: {raw_file}")
 print("=" * 80)

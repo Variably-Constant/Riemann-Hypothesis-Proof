@@ -11,7 +11,7 @@ Verification Methods:
 2. SymPy Symbolic Computation - For calculus identities
 3. Numerical Verification - For asymptotic behavior
 
-Author: Formal Verification Suite
+Author: Mark Newton
 Date: January 30, 2026
 """
 
@@ -69,12 +69,8 @@ def record_result(claim_name, status, method, details=""):
         if details:
             print(f"    Details: {details}")
 
-# =============================================================================
-# SECTION 1: OPERATOR AND HILBERT SPACE FOUNDATIONS
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("SECTION 1: OPERATOR AND HILBERT SPACE FOUNDATIONS")
+print("Operator and Hilbert Space Foundations")
 print("=" * 80)
 
 # -----------------------------------------------------------------------------
@@ -184,12 +180,8 @@ if forward_ok and backward_ok:
 else:
     record_result("Critical Line Biconditional", False, "Z3 Logic")
 
-# =============================================================================
-# SECTION 2: FISHER METRIC AND ARC LENGTH
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("SECTION 2: FISHER METRIC AND ARC LENGTH")
+print("Fisher Metric and Arc Length")
 print("=" * 80)
 
 # -----------------------------------------------------------------------------
@@ -308,12 +300,8 @@ if solver4.check() == unsat:
 else:
     record_result("Symmetry of Weight Function", False, "Z3 Algebraic")
 
-# =============================================================================
-# SECTION 3: SELF-ADJOINT EXTENSIONS
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("SECTION 3: SELF-ADJOINT EXTENSIONS")
+print("Self-Adjoint Extensions")
 print("=" * 80)
 
 # -----------------------------------------------------------------------------
@@ -409,12 +397,8 @@ if solver5.check() == sat:
 else:
     record_result("Self-Adjoint Extensions Exist", False, "Z3 Logic")
 
-# =============================================================================
-# SECTION 4: BOUNDARY CONDITION AND alpha = pi
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("SECTION 4: BOUNDARY CONDITION AND alpha = pi")
+print("Boundary Condition and alpha = pi")
 print("=" * 80)
 
 # -----------------------------------------------------------------------------
@@ -463,12 +447,8 @@ if euler_simplified == -1:
 else:
     record_result("Natural Boundary Condition alpha = pi", False, "SymPy Symbolic")
 
-# =============================================================================
-# SECTION 5: TRACE FORMULA COMPONENTS
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("SECTION 5: TRACE FORMULA COMPONENTS")
+print("Trace Formula Components")
 print("=" * 80)
 
 # -----------------------------------------------------------------------------
@@ -630,12 +610,8 @@ else:
         f"Prime sum = {prime_sum}, Mangoldt sum = {mangoldt_sum}"
     )
 
-# =============================================================================
-# SECTION 6: TRACE FORMULA MATCHING
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("SECTION 6: TRACE FORMULA MATCHING")
+print("Trace Formula Matching")
 print("=" * 80)
 
 # -----------------------------------------------------------------------------
@@ -753,12 +729,8 @@ if smooth_ok and sign_ok:
 else:
     record_result("Complete Trace Formula Matching", False, "Logical Consequence")
 
-# =============================================================================
-# SECTION 7: SPECTRAL CORRESPONDENCE AND RH
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("SECTION 7: SPECTRAL CORRESPONDENCE AND RH")
+print("Spectral Correspondence and RH")
 print("=" * 80)
 
 # -----------------------------------------------------------------------------
@@ -868,12 +840,8 @@ if solver8.check() == unsat:
 else:
     record_result("THE RIEMANN HYPOTHESIS", False, "Z3 Logic")
 
-# =============================================================================
-# SECTION 8: NUMERICAL VERIFICATION
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("SECTION 8: NUMERICAL VERIFICATION")
+print("Numerical Verification")
 print("=" * 80)
 
 # -----------------------------------------------------------------------------
@@ -934,12 +902,8 @@ if abs(N_weyl - N_actual) < 2:  # Within 2 of actual count
 else:
     record_result("Weyl Law Numerical Check", False, "Numerical Verification")
 
-# =============================================================================
-# FINAL SUMMARY
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("FINAL VERIFICATION SUMMARY")
+print("Summary")
 print("=" * 80)
 
 print(f"\nTotal claims verified: {results['total_verified']}")
@@ -967,59 +931,68 @@ print("PROOF STATUS")
 print("=" * 80)
 
 if results['total_failed'] == 0:
-    print("""
-================================================================================
-                    ALL CLAIMS FORMALLY VERIFIED
-================================================================================
-
-The Riemann Hypothesis proof has been rigorously verified:
-
-1. OPERATOR FOUNDATION [Z3 VERIFIED]
-   - Berry-Keating eigenvalue equation
-   - Real eigenvalues on critical line
-   - Critical line biconditional
-
-2. FISHER METRIC [SymPy VERIFIED]
-   - Weight function from Fisher information
-   - Arc length = pi exactly
-   - Symmetry w(q) = w(1-q)
-
-3. SELF-ADJOINT EXTENSIONS [SymPy + Logic VERIFIED]
-   - Deficiency indices (1,1)
-   - von Neumann extensions exist
-
-4. BOUNDARY CONDITION [SymPy VERIFIED]
-   - alpha = pi from arc length
-   - e^{i*pi} = -1 (Euler's identity)
-
-5. TRACE FORMULA [SymPy + Numerical VERIFIED]
-   - Weyl density matches Riemann zero density
-   - von Mangoldt function identity
-   - Prime sum = von Mangoldt sum
-   - Sign matching with e^{i*pi} = -1
-   - Complete trace formula matching
-
-6. SPECTRAL CORRESPONDENCE [Logic VERIFIED]
-   - Uniqueness of spectral measure
-   - Spec(H_pi) = {gamma_n}
-
-7. THE RIEMANN HYPOTHESIS [Z3 VERIFIED]
-   - Self-adjoint => real spectrum
-   - gamma_n real => Re(rho_n) = 1/2
-
-================================================================================
-                         Q.E.D.
-================================================================================
-""")
+    print("All claims formally verified.")
 else:
-    print(f"\nSome claims could not be verified. See details above.")
+    print(f"Some claims could not be verified. See details above.")
 
 # Save results
 from pathlib import Path
+from datetime import datetime
 results_file = Path("results/RH_14_Formal_Verification.json")
 results_file.parent.mkdir(exist_ok=True)
 with open(results_file, 'w') as f:
     json.dump(results, f, indent=2)
 
 print(f"\nResults saved to: {results_file}")
+
+# =============================================================================
+# SAVE RAW DATA FOR COMPLETENESS
+# =============================================================================
+print("\n" + "=" * 80)
+print("Saving Raw Data")
+print("=" * 80)
+
+# Von Mangoldt data for plotting
+n_range_raw = list(range(1, 51))
+mangoldt_vals_raw = [von_mangoldt(n) for n in n_range_raw]
+amplitudes_raw = [von_mangoldt(n) / np.sqrt(n) if n >= 1 else 0 for n in n_range_raw]
+
+# Weyl law data
+T_range_weyl = np.linspace(10, 100, 50)
+weyl_N_raw = [weyl_asymptotic(T) for T in T_range_weyl]
+actual_N_raw = [sum(1 for g in known_zeros if g < T) for T in T_range_weyl]
+
+raw_data = {
+    "metadata": {
+        "script": "RH_14_Formal_Verification.py",
+        "generated": datetime.now().isoformat(),
+        "verification_methods": ["Z3 Theorem Prover", "SymPy Symbolic", "Numerical"]
+    },
+    "summary": {
+        "total_verified": results["total_verified"],
+        "total_failed": results["total_failed"],
+        "claims_verified": [c["claim"] for c in results["claims_verified"]]
+    },
+    "known_zeros": known_zeros,
+    "von_mangoldt": {
+        "n_range": n_range_raw,
+        "Lambda_n": mangoldt_vals_raw,
+        "amplitudes": amplitudes_raw
+    },
+    "weyl_law": {
+        "T_range": T_range_weyl.tolist(),
+        "weyl_N": weyl_N_raw,
+        "actual_N": actual_N_raw
+    },
+    "key_constants": {
+        "arc_length": float(np.pi),
+        "alpha_boundary": float(np.pi),
+        "exp_i_pi": {"real": -1.0, "imag": 0.0}
+    }
+}
+
+raw_file = Path("results/RH_14_Formal_Verification_RAW.json")
+with open(raw_file, 'w') as f:
+    json.dump(raw_data, f, indent=2, default=str)
+print(f"Raw data saved to: {raw_file}")
 print("=" * 80)

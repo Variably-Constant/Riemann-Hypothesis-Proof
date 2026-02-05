@@ -528,5 +528,73 @@ def main():
     results_file = Path("results/RH_07_Heat_Kernel.json")
     results_file.write_text(json.dumps(results, indent=2))
 
+    # =============================================================================
+    # SAVE RAW DATA FOR FIGURE GENERATION
+    # =============================================================================
+    log("\n" + "=" * 70)
+    log("Saving Raw Data")
+    log("=" * 70)
+
+    # Known zeros for data
+    gamma = [14.134725, 21.022040, 25.010858, 30.424876, 32.935062]
+
+    # Compute smooth density Phi(t) for various t
+    t_values = np.linspace(1, 100, 200)
+    Phi_values = []
+    for t in t_values:
+        z = 0.25 + 0.5j * t
+        psi = special.digamma(z)
+        Phi = psi.real + np.log(np.pi) / 2
+        Phi_values.append(Phi)
+
+    # Compute smooth zero count N(T)
+    T_values = np.linspace(5, 100, 50)
+    N_smooth_values = []
+    N_asymptotic_values = []
+    for T in T_values:
+        # Smooth count via numerical integration
+        result, _ = integrate.quad(lambda t: (special.digamma(0.25 + 0.5j * t).real + np.log(np.pi) / 2), 0, T)
+        N_smooth_values.append(result / (2 * np.pi))
+        # Asymptotic formula
+        if T > 0:
+            N_asymptotic_values.append(T / (2 * np.pi) * np.log(T / (2 * np.pi)) - T / (2 * np.pi))
+        else:
+            N_asymptotic_values.append(0)
+
+    # Mellin transform verification data
+    lambda_test = 14.13
+    s_range = np.linspace(1.0, 3.0, 30)
+    mellin_analytical = []
+    for s in s_range:
+        val = 1 / (s + 1j * lambda_test - 0.5)
+        mellin_analytical.append({"s": s, "real": val.real, "imag": val.imag})
+
+    raw_data = {
+        "metadata": {
+            "script": "RH_07_Heat_Kernel.py",
+            "generated": datetime.now().isoformat()
+        },
+        "known_zeros": gamma,
+        "smooth_density": {
+            "t_values": t_values.tolist(),
+            "Phi_values": Phi_values
+        },
+        "zero_count": {
+            "T_values": T_values.tolist(),
+            "N_smooth": N_smooth_values,
+            "N_asymptotic": N_asymptotic_values
+        },
+        "mellin_transform": {
+            "lambda_test": lambda_test,
+            "s_range": s_range.tolist(),
+            "analytical_values": mellin_analytical
+        }
+    }
+
+    raw_file = Path("results/RH_07_Heat_Kernel_RAW.json")
+    with open(raw_file, 'w', encoding='utf-8') as f:
+        json.dump(raw_data, f, indent=2)
+    log(f"Raw data saved to {raw_file}")
+
 if __name__ == "__main__":
     main()

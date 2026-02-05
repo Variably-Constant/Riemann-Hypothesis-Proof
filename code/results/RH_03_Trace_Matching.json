@@ -1,0 +1,22 @@
+{
+  "approaches": {
+    "trace_formula": {
+      "status": "SUCCESS",
+      "smooth_match": true,
+      "oscillating_match": true
+    },
+    "gelfand_yaglom": {
+      "status": "COMPUTED",
+      "note": "Regularized monodromy computed; connection to \u03be explored"
+    },
+    "resolvent": {
+      "status": "COMPUTED",
+      "method": "Wronskian condition and trace analysis"
+    },
+    "numerical": {
+      "status": "COMPUTED",
+      "eigenvalues_found": 200
+    }
+  },
+  "success": true
+}

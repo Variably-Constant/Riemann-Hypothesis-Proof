@@ -56,12 +56,8 @@ print("RIGOROUS VERIFICATION OF RIEMANN HYPOTHESIS PROOF - V2.0")
 print("=" * 80)
 log("Starting verification...")
 
-# =============================================================================
-# PART 1: FISHER INFORMATION AND ARC LENGTH (Foundation)
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("PART 1: FISHER INFORMATION AND ARC LENGTH")
+print("Fisher Information and Arc Length")
 print("=" * 80)
 
 q_sym = Symbol('q', positive=True)
@@ -109,12 +105,8 @@ results["theorems_verified"]["arc_length_equals_pi"] = {
 }
 log(f"[{'VERIFIED' if arc_length_verified else 'FAILED'}] Arc length = pi")
 
-# =============================================================================
-# PART 2: DEFICIENCY INDICES AND SELF-ADJOINT EXTENSIONS (Issue 3)
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("PART 2: DEFICIENCY INDICES (Issue 3)")
+print("Deficiency Indices")
 print("=" * 80)
 
 # Verify phi_+(q) = q^{-3/2} satisfies (H* - i)phi = 0
@@ -153,12 +145,8 @@ results["theorems_verified"]["deficiency_subspaces"] = {
 log(f"[{'VERIFIED' if phi_plus_verified else 'FAILED'}] phi_+ in N_+")
 log(f"[{'VERIFIED' if phi_minus_verified else 'FAILED'}] phi_- in N_-")
 
-# =============================================================================
-# PART 3: AMPLITUDE DERIVATION - NOT CIRCULAR (Issue 1)
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("PART 3: AMPLITUDE DERIVATION FROM GUTZWILLER (Issue 1)")
+print("Amplitude Derivation from Gutzwiller")
 print("=" * 80)
 
 # Hamilton's equations verification
@@ -227,12 +215,8 @@ results["theorems_verified"]["stability_matrix"] = {
 }
 log(f"[{'VERIFIED' if det_verified else 'FAILED'}] Stability matrix determinant")
 
-# =============================================================================
-# PART 4: VON MANGOLDT FUNCTION EMERGENCE (Issue 1 continued)
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("PART 4: VON MANGOLDT FUNCTION EMERGENCE")
+print("Von Mangoldt Function Emergence")
 print("=" * 80)
 
 def von_mangoldt(n):
@@ -355,12 +339,8 @@ results["issues_resolved"]["issue_1_amplitude_derivation"] = {
 }
 log(f"[{'VERIFIED' if orbit_match else 'FAILED'}] Orbit sum = von Mangoldt sum (Issue 1 RESOLVED)")
 
-# =============================================================================
-# PART 5: TRACE FORMULA COMPONENTS (Issue 2)
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("PART 5: TRACE FORMULA COMPONENTS (Issue 2)")
+print("Trace Formula Components")
 print("=" * 80)
 
 # Smooth term: Weyl density vs Gamma factor
@@ -413,12 +393,8 @@ results["issues_resolved"]["issue_2_trace_formula"] = {
 }
 log("[VERIFIED] Trace formula components (Issue 2 RESOLVED)")
 
-# =============================================================================
-# PART 6: SPECTRAL CORRESPONDENCE (Issue 4)
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("PART 6: SPECTRAL CORRESPONDENCE (Issue 4)")
+print("Spectral Correspondence")
 print("=" * 80)
 
 log("""
@@ -476,12 +452,8 @@ results["issues_resolved"]["issue_4_spectral_correspondence"] = {
 }
 log(f"[{'VERIFIED' if spectral_correspondence_proven else 'FAILED'}] Spectral correspondence (Issue 4 RESOLVED)")
 
-# =============================================================================
-# PART 7: DOMAIN ISSUES (Issue 3)
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("PART 7: DOMAIN ISSUES (Issue 3)")
+print("Domain Issues")
 print("=" * 80)
 
 log("""
@@ -530,12 +502,8 @@ results["issues_resolved"]["issue_3_domain"] = {
 }
 log(f"[{'VERIFIED' if domain_issue_resolved else 'FAILED'}] Domain issues (Issue 3 RESOLVED)")
 
-# =============================================================================
-# PART 8: COMPLETE LOGICAL CHAIN (Main Theorem)
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("PART 8: COMPLETE LOGICAL CHAIN - RIEMANN HYPOTHESIS")
+print("Complete Logical Chain")
 print("=" * 80)
 
 # Z3 verification of complete proof
@@ -611,12 +579,8 @@ spectrum_real -----------------------+---> RH = TRUE
 
 log(f"[Z3] Riemann Hypothesis proven: {RH_proven}")
 
-# =============================================================================
-# FINAL SUMMARY
-# =============================================================================
-
 print("\n" + "=" * 80)
-print("FINAL VERIFICATION SUMMARY")
+print("Summary")
 print("=" * 80)
 
 all_issues_resolved = all([
@@ -661,15 +625,7 @@ print(f"""
 """)
 
 if RH_proven and all_issues_resolved:
-    print("""
-    +----------------------------------------------------------+
-    |                                                          |
-    |   THE RIEMANN HYPOTHESIS IS PROVEN                       |
-    |                                                          |
-    |   All non-trivial zeros of zeta(s) satisfy Re(s) = 1/2   |
-    |                                                          |
-    +----------------------------------------------------------+
-    """)
+    log("All verification steps passed.")
 
 # Save results
 results_file = Path("results/RH_12_Trace_Derivation.json")
@@ -677,4 +633,96 @@ with open(results_file, 'w') as f:
     json.dump(results, f, indent=2, default=str)
 
 log(f"\nResults saved to: {results_file}")
+
+# =============================================================================
+# SAVE RAW DATA FOR FIGURE GENERATION
+# =============================================================================
+print("\n" + "=" * 80)
+print("Saving Raw Data for Figures")
+print("=" * 80)
+
+# Figure 1 data: Fisher weight and arc-length
+q_vals_fig1 = np.linspace(0.01, 0.99, 500)
+w_vals_fig1 = 1 / (q_vals_fig1 * (1 - q_vals_fig1))
+s_vals_fig1 = 2 * np.arcsin(np.sqrt(q_vals_fig1))
+
+# Figure 2 data: Smooth spectral density
+t_vals_fig2 = np.linspace(0.1, 100, 500)
+def Phi_RW(t):
+    z = 0.25 + 0.5j * t
+    return special.digamma(z).real + np.log(np.pi) / 2
+Phi_vals_fig2 = np.array([Phi_RW(t) for t in t_vals_fig2])
+
+# Comparison points for asymptotic
+t_test_fig2 = np.array([10, 20, 30, 50, 80, 100])
+Phi_test_fig2 = np.array([Phi_RW(t) for t in t_test_fig2])
+Phi_asymp_fig2 = 0.5 * np.log(t_test_fig2 / (2 * np.pi))
+
+# Figure 7 data: Deficiency functions
+q_vals_fig7 = np.linspace(0.001, 0.999, 1000)
+phi_plus_vals = q_vals_fig7 ** (-1.5)  # q^{-3/2}
+phi_minus_vals = q_vals_fig7 ** 0.5    # q^{1/2}
+w_vals_fig7 = 1 / (q_vals_fig7 * (1 - q_vals_fig7))
+integrand_plus = phi_plus_vals**2 * w_vals_fig7
+integrand_minus = phi_minus_vals**2 * w_vals_fig7
+
+# Von Mangoldt data for various n (also useful for Figure 8)
+n_range_vm = list(range(1, 101))
+von_mangoldt_vals = [von_mangoldt(n) for n in n_range_vm]
+amplitudes_vm = [von_mangoldt(n) / np.sqrt(n) if n >= 2 else 0 for n in n_range_vm]
+
+# Smooth term comparison data
+r_vals_smooth = np.array([10, 100, 1000, 10000])
+weyl_vals = [(1/(2*np.pi)) * np.log(r / (2*np.pi)) for r in r_vals_smooth]
+gamma_vals = [gamma_density(r) for r in r_vals_smooth]
+
+raw_data = {
+    "metadata": {
+        "script": "RH_12_Trace_Derivation.py",
+        "generated": datetime.now().isoformat()
+    },
+    "figure1_fisher_weight": {
+        "q_vals": q_vals_fig1.tolist(),
+        "w_vals": w_vals_fig1.tolist(),
+        "s_vals": s_vals_fig1.tolist(),
+        "arc_length_total": float(arc_length_numerical),
+        "q_half_w": float(1 / (0.5 * 0.5))  # w(1/2) = 4
+    },
+    "figure2_smooth_density": {
+        "t_vals": t_vals_fig2.tolist(),
+        "Phi_vals": Phi_vals_fig2.tolist(),
+        "t_test": t_test_fig2.tolist(),
+        "Phi_test": Phi_test_fig2.tolist(),
+        "Phi_asymp": Phi_asymp_fig2.tolist()
+    },
+    "figure7_deficiency": {
+        "q_vals": q_vals_fig7.tolist(),
+        "phi_plus": phi_plus_vals.tolist(),
+        "phi_minus": phi_minus_vals.tolist(),
+        "w_vals": w_vals_fig7.tolist(),
+        "integrand_plus": integrand_plus.tolist(),
+        "integrand_minus": integrand_minus.tolist()
+    },
+    "von_mangoldt": {
+        "n_range": n_range_vm,
+        "Lambda_n": von_mangoldt_vals,
+        "amplitudes": amplitudes_vm
+    },
+    "smooth_term_comparison": {
+        "r_vals": r_vals_smooth.tolist(),
+        "weyl_density": weyl_vals,
+        "gamma_density": gamma_vals,
+        "diff_constant": float(-np.log(np.pi)/(2*np.pi))
+    },
+    "euler_identity": {
+        "exp_i_pi_real": float(np.exp(1j * np.pi).real),
+        "exp_i_pi_imag": float(np.exp(1j * np.pi).imag)
+    }
+}
+
+raw_file = Path("results/RH_12_Trace_Derivation_RAW.json")
+with open(raw_file, 'w') as f:
+    json.dump(raw_data, f, indent=2)
+
+log(f"Raw data saved to: {raw_file}")
 log("Verification complete.")

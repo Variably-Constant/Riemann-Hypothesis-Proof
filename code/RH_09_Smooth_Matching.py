@@ -466,5 +466,76 @@ def main():
     results_file.write_text(json.dumps(summary, indent=2))
     log(f"Results saved to {results_file}")
 
+    # =============================================================================
+    # SAVE RAW DATA FOR FIGURE GENERATION
+    # =============================================================================
+    log("\n" + "=" * 70)
+    log("Saving Raw Data")
+    log("=" * 70)
+
+    # Smooth density Phi(t) = Re[psi(1/4 + it/2)] + log(pi)/2
+    t_values = np.linspace(0.5, 100, 300)
+    Phi_values = [riemann_weil_smooth_density(t) for t in t_values]
+
+    # Zero counting function comparison
+    T_values = np.linspace(5, 100, 100)
+    N_smooth_values = []
+    N_asymptotic_values = []
+    for T in T_values:
+        N_smooth_values.append(riemann_weil_zero_count(T))
+        # Asymptotic: N(T) ~ T/(2pi) * log(T/(2pi*e))
+        N_asymptotic_values.append(T/(2*np.pi) * np.log(T/(2*np.pi)) - T/(2*np.pi))
+
+    # Hurwitz zeta connection data
+    a_values = np.linspace(0.1, 2.0, 50)
+    zeta_H_prime_0 = []
+    det_A_values = []
+    for a in a_values:
+        zeta_prime = np.log(special.gamma(a) / np.sqrt(2*np.pi))
+        det_a = np.exp(-zeta_prime)
+        zeta_H_prime_0.append(zeta_prime)
+        det_A_values.append(det_a)
+
+    # Digamma function values on critical line
+    t_digamma = np.linspace(1, 50, 100)
+    digamma_real = []
+    digamma_imag = []
+    for t in t_digamma:
+        z = 0.25 + 0.5j * t
+        psi_val = special.digamma(z)
+        digamma_real.append(psi_val.real)
+        digamma_imag.append(psi_val.imag)
+
+    raw_data = {
+        "metadata": {
+            "script": "RH_09_Smooth_Matching.py",
+            "generated": datetime.now().isoformat()
+        },
+        "smooth_density": {
+            "t_values": t_values.tolist(),
+            "Phi_values": Phi_values
+        },
+        "zero_count_comparison": {
+            "T_values": T_values.tolist(),
+            "N_smooth": N_smooth_values,
+            "N_asymptotic": N_asymptotic_values
+        },
+        "hurwitz_connection": {
+            "a_values": a_values.tolist(),
+            "zeta_H_prime_0": zeta_H_prime_0,
+            "det_A_values": det_A_values
+        },
+        "digamma_on_line": {
+            "t_values": t_digamma.tolist(),
+            "real_part": digamma_real,
+            "imag_part": digamma_imag
+        }
+    }
+
+    raw_file = Path("results/RH_09_Smooth_Matching_RAW.json")
+    with open(raw_file, 'w', encoding='utf-8') as f:
+        json.dump(raw_data, f, indent=2)
+    log(f"Raw data saved to {raw_file}")
+
 if __name__ == "__main__":
     main()

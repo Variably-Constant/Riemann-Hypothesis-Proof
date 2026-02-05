@@ -640,5 +640,74 @@ def main():
     results_file.write_text(json.dumps(results_json, indent=2))
     log(f"Results saved to {results_file}")
 
+    # =============================================================================
+    # SAVE RAW DATA FOR FIGURE GENERATION
+    # =============================================================================
+    log("\n" + "=" * 70)
+    log("Saving Raw Data")
+    log("=" * 70)
+
+    # Hilbert space isomorphism test data
+    a, b = 0.3, 0.4
+    q_test_values = np.linspace(0.01, 0.99, 100)
+    isomorphism_integrand_q = [q**(2*a - 1) * (1-q)**(2*b - 1) for q in q_test_values]
+
+    x_test_values = np.logspace(-2, 2, 100)
+    isomorphism_integrand_x = [x**(2*a - 1) / (1+x)**(2*(a+b)) for x in x_test_values]
+
+    # Arc-length parameterization data
+    s_arc = np.linspace(0.01, np.pi - 0.01, 100)
+    q_from_s = np.sin(s_arc/2)**2
+
+    # Numerical eigenvalues (first 20)
+    eigenvalues_computed = results.get("eigenvalues", [])[:20]
+
+    # Resolvent trace data
+    z_test_range = np.linspace(5, 40, 50)
+    resolvent_sums = []
+    for z_re in z_test_range:
+        z_val = z_re + 2.0j
+        res_sum = sum(1/(gamma - z_val) for gamma in ZETA_ZEROS)
+        resolvent_sums.append({"z_real": z_re, "sum_real": res_sum.real, "sum_imag": res_sum.imag})
+
+    # Z function data for functional equation verification
+    t_Z_values = np.linspace(5, 50, 100)
+    Z_function_data = []
+    for t in t_Z_values:
+        log_gamma = special.loggamma(0.25 + 0.5j * t)
+        theta = log_gamma.imag - t/2 * np.log(np.pi)
+        s = 0.5 + 1j * t
+        eta = sum(((-1)**(n-1)) / n**s for n in range(1, 500))
+        zeta_approx = eta / (1 - 2**(1-s))
+        Z = np.exp(1j * theta) * zeta_approx
+        Z_function_data.append({"t": t, "Z_real": Z.real, "Z_imag": Z.imag})
+
+    raw_data = {
+        "metadata": {
+            "script": "RH_08_Spectral_Analysis.py",
+            "generated": datetime.now().isoformat()
+        },
+        "zeta_zeros": ZETA_ZEROS,
+        "hilbert_isomorphism": {
+            "a": a, "b": b,
+            "q_values": q_test_values.tolist(),
+            "integrand_q": isomorphism_integrand_q,
+            "x_values": x_test_values.tolist(),
+            "integrand_x": isomorphism_integrand_x
+        },
+        "arc_length": {
+            "s_values": s_arc.tolist(),
+            "q_values": q_from_s.tolist()
+        },
+        "eigenvalues_numerical": convert_for_json(eigenvalues_computed),
+        "resolvent_trace": resolvent_sums,
+        "Z_function": Z_function_data
+    }
+
+    raw_file = Path("results/RH_08_Spectral_Analysis_RAW.json")
+    with open(raw_file, 'w', encoding='utf-8') as f:
+        json.dump(raw_data, f, indent=2)
+    log(f"Raw data saved to {raw_file}")
+
 if __name__ == "__main__":
     main()

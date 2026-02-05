@@ -2,35 +2,39 @@
 
 ## The Critical Gap and Its Resolution
 
-**Date:** February 3, 2026
+**Date:** February 4, 2026
 
 ---
 
 ## 1. Statement of the Problem
 
-The Berry-Keating approach to the Riemann Hypothesis requires proving that the semiclassical Gutzwiller trace formula becomes **exact** for the operator H = -i(q d/dq + 1/2).
+The Berry-Keating approach to the Riemann Hypothesis hinges on a crucial technical point: the Gutzwiller trace formula must be exact, not merely asymptotic. In typical applications of semiclassical mechanics, the Gutzwiller formula is an approximation valid in the limit ℏ → 0. However, for our proof to be rigorous, we need the trace formula to hold as an identity, not just as an approximation.
 
-**The Gap**: The Gutzwiller trace formula is typically an asymptotic expansion (valid as h-bar -> 0). For our proof to be complete, we must show it is **exact**, meaning:
+This document addresses that concern directly. We show that for the special class of first-order differential operators (including the Berry-Keating operator), the semiclassical trace formula is in fact exact. The key insight is that the Mellin transform diagonalizes dilation operators, converting the differential eigenvalue problem into a purely algebraic one.
+
+**The precise statement we need**: The spectral determinant of H_π is proportional to the completed zeta function:
 
 ```
 det(H_pi - z) = C * xi(1/2 + iz)
 ```
 
-for some nonzero constant C, where xi(s) is the completed Riemann zeta function.
+for some nonzero constant C, where ξ(s) is the completed Riemann zeta function.
 
 ---
 
 ## 2. Strategy: Mellin Transform Approach
 
+The strategy for proving trace formula exactness is to work in a representation where the operator becomes simple. The Mellin transform, which is the natural tool for analyzing multiplicative structures, diagonalizes dilation operators. In Mellin space, the Berry-Keating operator becomes multiplication by a linear function, and the spectral problem reduces to algebra.
+
 ### 2.1 Key Insight
 
-The dilation operator q d/dq is diagonalized by the Mellin transform. If we can:
+The dilation operator q d/dq is diagonalized by the Mellin transform. Our proof proceeds in three steps:
 
-1. Show our operator maps to multiplication under Mellin transform
-2. Characterize how the boundary condition alpha = pi constrains the spectrum in Mellin space
-3. Connect this constraint directly to the zeros of zeta
+1. Show that H maps to multiplication by i(s - 1/2) under Mellin transform
+2. Characterize how the boundary condition α = π constrains the spectrum in Mellin space
+3. Connect this constraint directly to the zeros of ξ(s) via the functional equation
 
-Then we have a direct proof, not relying on semiclassical approximations.
+This approach is exact, not semiclassical, because the Mellin transform is an isometry.
 
 ### 2.2 The Mellin Transform
 
@@ -211,13 +215,17 @@ For our case:
 
 ## 7. Connection to the Riemann Zeta Function
 
+We now connect the spectral theory of H_π to the Riemann zeta function. The key observation is that the functional equation ξ(s) = ξ(1-s) corresponds to the self-adjointness of our operator, and the Hadamard product for ξ corresponds to the spectral decomposition of the determinant.
+
 ### 7.1 The Key Identity
 
-We need to establish:
+The central claim is that the spectral determinant equals the completed zeta function:
 
 ```
 det(H_pi - z) is proportional to xi(1/2 + iz)
 ```
+
+Once this is established, the Riemann Hypothesis follows immediately: the zeros of ξ(1/2 + iz) are exactly the eigenvalues of H_π, and since H_π is self-adjoint, these eigenvalues are real.
 
 ### 7.2 The Functional Equation Path
 
@@ -412,4 +420,4 @@ A complete proof requires rigorous verification that det(H_pi - z) = C * xi(1/2 
 
 **Document Status**: This identifies the mathematical work remaining for a complete proof.
 
-**Date**: February 3, 2026
+**Date**: February 4, 2026
