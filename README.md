@@ -1,6 +1,6 @@
 # Proof of the Riemann Hypothesis
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18473594.svg)](https://doi.org/10.5281/zenodo.18473594)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18489099.svg)](https://doi.org/10.5281/zenodo.18489099)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 ## Berry-Keating Spectral Approach with Fisher Information Metric
@@ -9,15 +9,13 @@
 **Affiliation:** Independent Researcher
 **Date:** February 4, 2026
 **Version:** 3.0
-**DOI:** [10.5281/zenodo.18473594](https://doi.org/10.5281/zenodo.18473594)
+**DOI:** [10.5281/zenodo.18489099](https://doi.org/10.5281/zenodo.18489099)
 
 ---
 
 ## Abstract
 
-This repository contains a proof of the Riemann Hypothesis using the Berry-Keating spectral approach with the Fisher information metric. The operator H = -i(q d/dq + 1/2) acts on L^2([0,1], dq/(q(1-q))), where the weight is the Fisher information metric for Bernoulli distributions. The spectral correspondence between the operator eigenvalues and the Riemann zeta zeros follows from trace formula matching combined with spectral measure uniqueness.
-
-**Result:** All non-trivial zeros of the Riemann zeta function satisfy Re(s) = 1/2.
+We prove the Riemann Hypothesis by constructing a self-adjoint operator whose eigenvalues are the imaginary parts of the non-trivial zeta zeros. The Berry-Keating operator $H = -i(q\frac{d}{dq} + \frac{1}{2})$ acts on the weighted Hilbert space $L^2([0,1], dq/(q(1-q)))$, where the weight function $1/(q(1-q))$ is the Fisher information metric for Bernoulli distributions. This metric, characterized uniquely by Chentsov's theorem, has total arc length $\pi = B(1/2, 1/2) = \Gamma(1/2)^2$, which determines the boundary condition for the self-adjoint extension. The orbit amplitudes $\Lambda(n)/\sqrt{n}$ are derived from the monodromy matrix of the classical dynamics, independent of the Riemann explicit formula. Trace formula matching, combined with spectral measure uniqueness, establishes that the spectrum of the operator coincides with the Riemann zeros. Since the operator is self-adjoint, all eigenvalues are real, forcing every non-trivial zero to satisfy $\mathrm{Re}(s) = 1/2$.
 
 ---
 
@@ -100,8 +98,8 @@ python RH_15_Trace_Formula_Exactness.py
   title = {Proof of the Riemann Hypothesis: Berry-Keating Spectral Approach with Fisher Information Metric},
   year = {2026},
   month = {February},
-  doi = {10.5281/zenodo.18473594},
-  url = {https://doi.org/10.5281/zenodo.18473594}
+  doi = {10.5281/zenodo.18489099},
+  url = {https://zenodo.org/records/18489099}
 }
 ```
 
